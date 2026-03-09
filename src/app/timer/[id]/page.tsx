@@ -34,36 +34,50 @@ export default function TimerPage() {
     return (
       <main className="flex h-screen flex-col bg-white">
         {showTimer ? (
-          <div className="flex items-center gap-4 border-b-2 border-slate-200 px-6 py-3">
-            <div className="flex-1">
-              <TimerDisplay timer={timer} size="normal" />
+          <div className="border-b-2 border-slate-200">
+            <div className="flex items-center gap-4 px-6 py-3">
+              <div className="flex-1">
+                <TimerDisplay timer={timer} size="normal" />
+              </div>
+              <TimerControls
+                timer={timer}
+                onStart={start}
+                onPause={pause}
+                onReset={reset}
+              />
+              <CompactShareLink timerId={id} />
             </div>
-            <TimerControls
-              timer={timer}
-              onStart={start}
-              onPause={pause}
-              onReset={reset}
-            />
-            <CompactShareLink timerId={id} />
-            <button
-              onClick={() => setShowPanel(!showPanel)}
-              className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors ${
-                showPanel
-                  ? "border-blue-500 bg-blue-50 text-blue-600"
-                  : "border-slate-200 text-slate-500 hover:bg-slate-50"
-              }`}
-            >
-              Settings
-            </button>
-            <button
-              onClick={() => {
-                setShowTimer(false);
-                setShowPanel(false);
-              }}
-              className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-500 transition-colors hover:bg-slate-50"
-            >
-              Hide Timer
-            </button>
+            <div className="flex items-center gap-2 border-t border-slate-100 bg-slate-50 px-6 py-2">
+              {showPanel ? (
+                <CompactTimerSetup
+                  onSetDuration={setDuration}
+                  onSetLabel={setLabel}
+                  currentLabel={timer.label}
+                  currentDuration={timer.duration}
+                />
+              ) : null}
+              <div className="ml-auto flex gap-2">
+                <button
+                  onClick={() => setShowPanel(!showPanel)}
+                  className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors ${
+                    showPanel
+                      ? "border-blue-500 bg-blue-50 text-blue-600"
+                      : "border-slate-200 text-slate-500 hover:bg-slate-50"
+                  }`}
+                >
+                  Settings
+                </button>
+                <button
+                  onClick={() => {
+                    setShowTimer(false);
+                    setShowPanel(false);
+                  }}
+                  className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-500 transition-colors hover:bg-slate-50"
+                >
+                  Hide Timer
+                </button>
+              </div>
+            </div>
           </div>
         ) : (
           <div className="flex items-center justify-end border-b border-slate-100 px-6 py-2">
@@ -73,16 +87,6 @@ export default function TimerPage() {
             >
               Show Timer
             </button>
-          </div>
-        )}
-        {showTimer && showPanel && (
-          <div className="flex items-center gap-4 border-b border-slate-100 bg-slate-50 px-6 py-3">
-            <CompactTimerSetup
-              onSetDuration={setDuration}
-              onSetLabel={setLabel}
-              currentLabel={timer.label}
-              currentDuration={timer.duration}
-            />
           </div>
         )}
         <div className="flex flex-1 flex-col p-4">
