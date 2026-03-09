@@ -26,7 +26,7 @@ export default function CompactShareLink({ timerId }: CompactShareLinkProps) {
   };
 
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex flex-col items-center gap-1">
       {viewUrl && (
         <div className="rounded-lg border border-slate-200 bg-white p-2">
           <QRCodeSVG value={viewUrl} size={80} />
@@ -34,7 +34,7 @@ export default function CompactShareLink({ timerId }: CompactShareLinkProps) {
       )}
       <button
         onClick={handleCopy}
-        className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-500 transition-colors hover:bg-slate-50"
+        className="rounded-lg border border-slate-200 px-2 py-1 text-[10px] font-medium text-slate-500 transition-colors hover:bg-slate-50"
       >
         {copied ? "Copied!" : "Copy URL"}
       </button>
