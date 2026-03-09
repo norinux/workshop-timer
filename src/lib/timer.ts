@@ -1,8 +1,8 @@
 export interface TimerState {
   id: string;
   duration: number; // total duration in seconds
-  remaining: number; // remaining time in seconds
-  status: "idle" | "running" | "paused" | "finished";
+  remaining: number; // remaining time in seconds (negative = overtime)
+  status: "idle" | "running" | "paused" | "finished" | "overtime";
 }
 
 export function createTimer(
@@ -19,9 +19,11 @@ export function createTimer(
 }
 
 export function formatTime(totalSeconds: number): string {
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = totalSeconds % 60;
-  return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+  const abs = Math.abs(totalSeconds);
+  const minutes = Math.floor(abs / 60);
+  const seconds = abs % 60;
+  const prefix = totalSeconds < 0 ? "+" : "";
+  return `${prefix}${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 }
 
 export function getProgress(timer: TimerState): number {
@@ -32,6 +34,7 @@ export function getProgress(timer: TimerState): number {
 export function getUrgencyLevel(
   timer: TimerState
 ): "normal" | "warning" | "critical" | "finished" {
+  if (timer.status === "overtime") return "finished";
   if (timer.status === "finished") return "finished";
   const ratio = timer.remaining / timer.duration;
   if (ratio <= 0) return "finished";

@@ -28,7 +28,7 @@ export function useTimer(id: string, durationMinutes: number) {
   const start = useCallback(() => {
     initSpeech();
     setTimer((prev) => {
-      if (prev.status === "finished") return prev;
+      if (prev.status === "finished" || prev.status === "overtime") return prev;
       if (prev.remaining <= 0) return prev;
       return { ...prev, status: "running" };
     });
@@ -36,7 +36,7 @@ export function useTimer(id: string, durationMinutes: number) {
 
   const pause = useCallback(() => {
     setTimer((prev) => {
-      if (prev.status !== "running") return prev;
+      if (prev.status !== "running" && prev.status !== "overtime") return prev;
       return { ...prev, status: "paused" };
     });
   }, []);
@@ -69,16 +69,25 @@ export function useTimer(id: string, durationMinutes: number) {
   );
 
   useEffect(() => {
-    if (timer.status === "running") {
+    if (timer.status === "running" || timer.status === "overtime") {
       intervalRef.current = setInterval(() => {
         setTimer((prev) => {
-          if (prev.remaining <= 1) {
-            playFinishBell();
-            return { ...prev, remaining: 0, status: "finished" };
-          }
-
           const newRemaining = prev.remaining - 1;
           const played = playedSoundsRef.current;
+
+          // Hit zero: play bell and switch to overtime
+          if (prev.remaining === 1 && prev.status === "running") {
+            if (!played.has("finish-bell")) {
+              played.add("finish-bell");
+              playFinishBell();
+            }
+            return { ...prev, remaining: 0, status: "overtime" };
+          }
+
+          // Already in overtime: keep counting down (negative)
+          if (prev.status === "overtime") {
+            return { ...prev, remaining: newRemaining };
+          }
 
           // Notification sounds at 5min, 3min, 1min, 30sec
           for (const sec of NOTIFICATION_SECONDS) {

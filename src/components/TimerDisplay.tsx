@@ -39,9 +39,9 @@ export default function TimerDisplay({ timer, size = "normal" }: TimerDisplayPro
         {timeText}
       </div>
 
-      {timer.status === "finished" && (
+      {(timer.status === "finished" || timer.status === "overtime") && (
         <div className={`mt-4 font-bold text-red-600 ${isLarge ? "text-2xl sm:text-4xl" : "text-xl sm:text-2xl"}`}>
-          TIME&apos;S UP!
+          {timer.status === "overtime" ? "OVERTIME" : "TIME\u0027S UP!"}
         </div>
       )}
 
@@ -67,6 +67,7 @@ export default function TimerDisplay({ timer, size = "normal" }: TimerDisplayPro
         {timer.status === "running" && "Running"}
         {timer.status === "paused" && "Paused"}
         {timer.status === "finished" && "Finished"}
+        {timer.status === "overtime" && "Overtime"}
       </div>
     </div>
   );

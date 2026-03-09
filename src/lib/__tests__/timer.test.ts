@@ -46,6 +46,14 @@ describe("formatTime", () => {
   it("pads single digit values", () => {
     expect(formatTime(61)).toBe("01:01");
   });
+
+  it("formats negative seconds with + prefix", () => {
+    expect(formatTime(-30)).toBe("+00:30");
+  });
+
+  it("formats negative minutes with + prefix", () => {
+    expect(formatTime(-125)).toBe("+02:05");
+  });
 });
 
 describe("getProgress", () => {
@@ -127,6 +135,16 @@ describe("getUrgencyLevel", () => {
       duration: 100,
       remaining: 0,
       status: "running",
+    };
+    expect(getUrgencyLevel(timer)).toBe("finished");
+  });
+
+  it("returns finished when status is overtime", () => {
+    const timer: TimerState = {
+      id: "a",
+      duration: 100,
+      remaining: -30,
+      status: "overtime",
     };
     expect(getUrgencyLevel(timer)).toBe("finished");
   });

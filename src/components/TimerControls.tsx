@@ -21,7 +21,7 @@ export default function TimerControls({
 
   return (
     <div className={`flex ${isVertical ? "flex-col gap-2" : "gap-4"}`}>
-      {timer.status === "running" ? (
+      {timer.status === "running" || timer.status === "overtime" ? (
         <button
           onClick={onPause}
           className={`rounded-xl bg-amber-500 font-bold text-white shadow-md transition-colors hover:bg-amber-400 ${
