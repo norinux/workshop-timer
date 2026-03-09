@@ -8,17 +8,17 @@ interface TimerDisplayProps {
 }
 
 const urgencyStyles = {
-  normal: "text-white",
-  warning: "text-yellow-400",
-  critical: "text-red-500 animate-pulse",
+  normal: "text-slate-800",
+  warning: "text-amber-600",
+  critical: "text-red-600 animate-pulse",
   finished: "text-red-600",
 };
 
-const urgencyBgStyles = {
-  normal: "from-slate-900 to-slate-800",
-  warning: "from-slate-900 to-yellow-950",
-  critical: "from-red-950 to-slate-900",
-  finished: "from-red-950 to-red-900",
+const urgencyBorderStyles = {
+  normal: "border-slate-200",
+  warning: "border-amber-300 bg-amber-50",
+  critical: "border-red-300 bg-red-50",
+  finished: "border-red-400 bg-red-50",
 };
 
 export default function TimerDisplay({ timer, size = "normal" }: TimerDisplayProps) {
@@ -29,13 +29,13 @@ export default function TimerDisplay({ timer, size = "normal" }: TimerDisplayPro
 
   return (
     <div
-      className={`flex flex-col items-center justify-center rounded-2xl bg-gradient-to-br p-8 ${urgencyBgStyles[urgency]} transition-all duration-500`}
+      className={`flex flex-col items-center justify-center rounded-2xl border-2 p-8 transition-all duration-500 ${urgencyBorderStyles[urgency]}`}
       role="timer"
       aria-label={`${timer.label}: ${timeText} remaining`}
     >
       {timer.label && (
         <h2
-          className={`mb-4 font-semibold text-slate-300 ${isLarge ? "text-3xl" : "text-xl"}`}
+          className={`mb-4 font-semibold text-slate-500 ${isLarge ? "text-3xl" : "text-xl"}`}
         >
           {timer.label}
         </h2>
@@ -48,18 +48,18 @@ export default function TimerDisplay({ timer, size = "normal" }: TimerDisplayPro
       </div>
 
       {timer.status === "finished" && (
-        <div className={`mt-4 font-bold text-red-500 ${isLarge ? "text-4xl" : "text-2xl"}`}>
+        <div className={`mt-4 font-bold text-red-600 ${isLarge ? "text-4xl" : "text-2xl"}`}>
           TIME&apos;S UP!
         </div>
       )}
 
-      <div className="mt-6 h-2 w-full max-w-md overflow-hidden rounded-full bg-slate-700">
+      <div className="mt-6 h-3 w-full max-w-md overflow-hidden rounded-full bg-slate-200">
         <div
           className={`h-full rounded-full transition-all duration-1000 ${
             urgency === "critical" || urgency === "finished"
               ? "bg-red-500"
               : urgency === "warning"
-                ? "bg-yellow-400"
+                ? "bg-amber-500"
                 : "bg-blue-500"
           }`}
           style={{ width: `${progress}%` }}
@@ -70,7 +70,7 @@ export default function TimerDisplay({ timer, size = "normal" }: TimerDisplayPro
         />
       </div>
 
-      <div className="mt-2 text-sm text-slate-400">
+      <div className="mt-2 text-sm font-medium text-slate-400">
         {timer.status === "idle" && "Ready"}
         {timer.status === "running" && "Running"}
         {timer.status === "paused" && "Paused"}

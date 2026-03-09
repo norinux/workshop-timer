@@ -32,7 +32,7 @@ export default function TimerSetup({
   return (
     <div className="w-full max-w-md space-y-6">
       <div>
-        <label htmlFor="timer-label" className="mb-2 block text-sm text-slate-400">
+        <label htmlFor="timer-label" className="mb-2 block text-sm font-medium text-slate-500">
           Session Name
         </label>
         <input
@@ -41,12 +41,12 @@ export default function TimerSetup({
           value={currentLabel}
           onChange={(e) => onSetLabel(e.target.value)}
           placeholder="e.g. Brainstorming"
-          className="w-full rounded-lg border border-slate-600 bg-slate-800 px-4 py-3 text-white placeholder-slate-500 focus:border-blue-500 focus:outline-none"
+          className="w-full rounded-lg border-2 border-slate-200 bg-white px-4 py-3 text-slate-800 placeholder-slate-400 focus:border-blue-500 focus:outline-none"
         />
       </div>
 
       <div>
-        <p className="mb-2 text-sm text-slate-400">Quick Set (minutes)</p>
+        <p className="mb-2 text-sm font-medium text-slate-500">Quick Set (minutes)</p>
         <div className="flex flex-wrap gap-2">
           {PRESET_MINUTES.map((min) => (
             <button
@@ -54,8 +54,8 @@ export default function TimerSetup({
               onClick={() => onSetDuration(min)}
               className={`rounded-lg px-4 py-2 text-sm font-semibold transition-colors ${
                 currentMinutes === min
-                  ? "bg-blue-600 text-white"
-                  : "bg-slate-700 text-slate-300 hover:bg-slate-600"
+                  ? "bg-blue-600 text-white shadow-md"
+                  : "border-2 border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
               }`}
             >
               {min}m
@@ -72,11 +72,11 @@ export default function TimerSetup({
           placeholder="Custom minutes"
           min={1}
           max={180}
-          className="flex-1 rounded-lg border border-slate-600 bg-slate-800 px-4 py-2 text-white placeholder-slate-500 focus:border-blue-500 focus:outline-none"
+          className="flex-1 rounded-lg border-2 border-slate-200 bg-white px-4 py-2 text-slate-800 placeholder-slate-400 focus:border-blue-500 focus:outline-none"
         />
         <button
           type="submit"
-          className="rounded-lg bg-blue-600 px-4 py-2 font-semibold text-white transition-colors hover:bg-blue-500"
+          className="rounded-lg bg-blue-600 px-4 py-2 font-semibold text-white shadow-md transition-colors hover:bg-blue-500"
         >
           Set
         </button>

@@ -24,7 +24,7 @@ export default function TimerPage() {
   }, [timer]);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-8 bg-slate-900 p-8">
+    <main className="flex min-h-screen flex-col items-center justify-center gap-8 bg-white p-8">
       <TimerDisplay timer={timer} size="large" />
       <TimerControls
         timer={timer}

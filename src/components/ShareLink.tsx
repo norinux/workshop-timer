@@ -27,9 +27,9 @@ export default function ShareLink({ timerId }: ShareLinkProps) {
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <p className="text-sm text-slate-400">Share with participants</p>
+      <p className="text-sm font-medium text-slate-500">Share with participants</p>
       {viewUrl && (
-        <div className="rounded-xl bg-white p-4">
+        <div className="rounded-xl border-2 border-slate-200 bg-white p-4 shadow-sm">
           <QRCodeSVG value={viewUrl} size={180} />
         </div>
       )}
@@ -38,11 +38,11 @@ export default function ShareLink({ timerId }: ShareLinkProps) {
           type="text"
           readOnly
           value={viewUrl}
-          className="flex-1 rounded-lg border border-slate-600 bg-slate-800 px-4 py-2 text-sm text-slate-300"
+          className="flex-1 rounded-lg border-2 border-slate-200 bg-slate-50 px-4 py-2 text-sm text-slate-600"
         />
         <button
           onClick={handleCopy}
-          className="rounded-lg bg-slate-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-500"
+          className="rounded-lg border-2 border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 transition-colors hover:bg-slate-50"
         >
           {copied ? "Copied!" : "Copy"}
         </button>

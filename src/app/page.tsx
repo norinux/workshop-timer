@@ -12,15 +12,15 @@ export default function Home() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-slate-900 p-8">
+    <main className="flex min-h-screen flex-col items-center justify-center bg-white p-8">
       <div className="text-center">
-        <h1 className="mb-4 text-5xl font-bold text-white">Workshop Timer</h1>
-        <p className="mb-8 text-lg text-slate-400">
+        <h1 className="mb-4 text-5xl font-bold text-slate-800">Workshop Timer</h1>
+        <p className="mb-8 text-lg text-slate-500">
           Startup Studio Workshop Timer
         </p>
         <button
           onClick={handleCreate}
-          className="rounded-xl bg-blue-600 px-10 py-5 text-2xl font-bold text-white transition-colors hover:bg-blue-500"
+          className="rounded-xl bg-blue-600 px-10 py-5 text-2xl font-bold text-white shadow-lg transition-colors hover:bg-blue-500"
         >
           Create Timer
         </button>
