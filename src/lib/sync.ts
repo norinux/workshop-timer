@@ -1,5 +1,5 @@
 import { TimerState } from "./timer";
-import { supabase } from "./supabase";
+import { getSupabase } from "./supabase";
 import type { RealtimeChannel } from "@supabase/supabase-js";
 
 export interface TimerSyncData {
@@ -12,6 +12,7 @@ let currentChannel: RealtimeChannel | null = null;
 export function broadcastTimerState(timer: TimerState): void {
   if (typeof window === "undefined") return;
 
+  const supabase = getSupabase();
   const data: TimerSyncData = {
     timer,
     updatedAt: Date.now(),
@@ -39,6 +40,7 @@ export function subscribeToTimer(
 ): () => void {
   if (typeof window === "undefined") return () => {};
 
+  const supabase = getSupabase();
   const channelName = `timer-${id}`;
   const channel = supabase.channel(channelName);
 
