@@ -2,14 +2,20 @@
 
 import { useState, useRef, useCallback, useEffect } from "react";
 import { TimerState, createTimer } from "@/lib/timer";
-import { playAlarm, playCountdownTick } from "@/lib/sound";
+import {
+  playFinishBell,
+  playNotification,
+  playCountdownTick,
+  NOTIFICATION_SECONDS,
+  COUNTDOWN_FROM,
+} from "@/lib/sound";
 
 export function useTimer(id: string, durationMinutes: number) {
   const [timer, setTimer] = useState<TimerState>(() =>
     createTimer(id, durationMinutes)
   );
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const lastTickSoundRef = useRef<number>(-1);
+  const playedSoundsRef = useRef<Set<string>>(new Set());
 
   const clearTickInterval = useCallback(() => {
     if (intervalRef.current) {
@@ -35,7 +41,7 @@ export function useTimer(id: string, durationMinutes: number) {
 
   const reset = useCallback(() => {
     clearTickInterval();
-    lastTickSoundRef.current = -1;
+    playedSoundsRef.current.clear();
     setTimer((prev) => ({
       ...prev,
       remaining: prev.duration,
@@ -46,7 +52,7 @@ export function useTimer(id: string, durationMinutes: number) {
   const setDuration = useCallback(
     (minutes: number) => {
       clearTickInterval();
-      lastTickSoundRef.current = -1;
+      playedSoundsRef.current.clear();
       setTimer((prev) => {
         const duration = minutes * 60;
         return {
@@ -65,18 +71,30 @@ export function useTimer(id: string, durationMinutes: number) {
       intervalRef.current = setInterval(() => {
         setTimer((prev) => {
           if (prev.remaining <= 1) {
-            playAlarm();
+            playFinishBell();
             return { ...prev, remaining: 0, status: "finished" };
           }
 
           const newRemaining = prev.remaining - 1;
+          const played = playedSoundsRef.current;
 
-          // Play countdown tick for last 5 seconds
-          if (newRemaining <= 5 && newRemaining > 0) {
-            if (lastTickSoundRef.current !== newRemaining) {
-              lastTickSoundRef.current = newRemaining;
-              playCountdownTick();
+          // Notification sounds at 5min, 3min, 1min, 30sec
+          for (const sec of NOTIFICATION_SECONDS) {
+            if (newRemaining === sec && !played.has(`notify-${sec}`)) {
+              played.add(`notify-${sec}`);
+              playNotification();
+              break;
             }
+          }
+
+          // Countdown tick for last 10 seconds
+          if (
+            newRemaining <= COUNTDOWN_FROM &&
+            newRemaining > 0 &&
+            !played.has(`tick-${newRemaining}`)
+          ) {
+            played.add(`tick-${newRemaining}`);
+            playCountdownTick();
           }
 
           return { ...prev, remaining: newRemaining };
