@@ -29,23 +29,23 @@ export default function TimerDisplay({ timer, size = "normal" }: TimerDisplayPro
 
   return (
     <div
-      className={`flex flex-col items-center justify-center rounded-2xl border-2 p-8 transition-all duration-500 ${urgencyBorderStyles[urgency]}`}
+      className={`flex w-full flex-col items-center justify-center rounded-2xl border-2 p-4 transition-all duration-500 sm:p-8 ${urgencyBorderStyles[urgency]}`}
       role="timer"
       aria-label={`${timeText} remaining`}
     >
       <div
-        className={`font-mono font-bold tabular-nums ${urgencyStyles[urgency]} ${isLarge ? "text-[12rem] leading-none" : "text-8xl"}`}
+        className={`font-mono font-bold tabular-nums ${urgencyStyles[urgency]} ${isLarge ? "text-6xl leading-none sm:text-8xl md:text-[12rem]" : "text-5xl sm:text-8xl"}`}
       >
         {timeText}
       </div>
 
       {timer.status === "finished" && (
-        <div className={`mt-4 font-bold text-red-600 ${isLarge ? "text-4xl" : "text-2xl"}`}>
+        <div className={`mt-4 font-bold text-red-600 ${isLarge ? "text-2xl sm:text-4xl" : "text-xl sm:text-2xl"}`}>
           TIME&apos;S UP!
         </div>
       )}
 
-      <div className="mt-6 h-3 w-full max-w-md overflow-hidden rounded-full bg-slate-200">
+      <div className="mt-4 h-3 w-full max-w-md overflow-hidden rounded-full bg-slate-200 sm:mt-6">
         <div
           className={`h-full rounded-full transition-all duration-1000 ${
             urgency === "critical" || urgency === "finished"

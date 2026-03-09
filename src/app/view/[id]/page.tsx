@@ -21,7 +21,7 @@ export default function ViewPage() {
 
   if (!timer) {
     return (
-      <main className="flex min-h-screen flex-col items-center justify-center bg-white p-8">
+      <main className="flex min-h-screen flex-col items-center justify-center bg-white p-4 sm:p-8">
         <div className="text-center">
           <p className="text-2xl text-slate-500">Waiting for timer...</p>
           <p className="mt-2 text-sm text-slate-400">
@@ -33,7 +33,7 @@ export default function ViewPage() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-white p-8">
+    <main className="flex min-h-screen flex-col items-center justify-center bg-white p-4 sm:p-8">
       <TimerDisplay timer={timer} size="large" />
     </main>
   );
