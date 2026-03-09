@@ -14,7 +14,6 @@ function getAudioContext(): AudioContext {
  * チンベル風の音（金属的な高音 + 残響）
  */
 function playBellHit(audioContext: AudioContext, startTime: number): void {
-  // メインの高音
   const osc1 = audioContext.createOscillator();
   const gain1 = audioContext.createGain();
   osc1.connect(gain1);
@@ -26,7 +25,6 @@ function playBellHit(audioContext: AudioContext, startTime: number): void {
   osc1.start(startTime);
   osc1.stop(startTime + 0.8);
 
-  // 倍音（金属感）
   const osc2 = audioContext.createOscillator();
   const gain2 = audioContext.createGain();
   osc2.connect(gain2);
@@ -38,7 +36,6 @@ function playBellHit(audioContext: AudioContext, startTime: number): void {
   osc2.start(startTime);
   osc2.stop(startTime + 0.5);
 
-  // アタック音（パチッという打撃感）
   const osc3 = audioContext.createOscillator();
   const gain3 = audioContext.createGain();
   osc3.connect(gain3);
@@ -65,17 +62,17 @@ export function playFinishBell(): void {
 }
 
 /**
- * 残り秒数に対応する日本語アナウンステキスト
+ * 残り秒数に対応する音声ファイル
  */
-const NOTIFICATION_MESSAGES: Record<number, string> = {
-  [5 * 60]: "残り5分です",
-  [3 * 60]: "残り3分です",
-  [60]: "残り1分です",
-  [30]: "残り30秒です",
+const NOTIFICATION_AUDIO: Record<number, string> = {
+  [5 * 60]: "/audio/notify-300.mp3",
+  [3 * 60]: "/audio/notify-180.mp3",
+  [60]: "/audio/notify-60.mp3",
+  [30]: "/audio/notify-30.mp3",
 };
 
 /**
- * 日本語音声アナウンス + チャイム音
+ * 日本語音声アナウンス（事前録音MP3） + チャイム音
  */
 export function playNotification(remainingSeconds: number): void {
   if (typeof window === "undefined") return;
@@ -100,17 +97,15 @@ export function playNotification(remainingSeconds: number): void {
   playTone(now, 880, 0.25);
   playTone(now + 0.3, 1100, 0.35);
 
-  // 日本語音声アナウンス
-  const message = NOTIFICATION_MESSAGES[remainingSeconds];
-  if (message && typeof speechSynthesis !== "undefined") {
-    const utterance = new SpeechSynthesisUtterance(message);
-    utterance.lang = "ja-JP";
-    utterance.rate = 1.0;
-    utterance.volume = 1.0;
-
-    // チャイム後に少し間を置いてアナウンス
+  // 事前録音の日本語音声を再生
+  const audioFile = NOTIFICATION_AUDIO[remainingSeconds];
+  if (audioFile) {
     setTimeout(() => {
-      speechSynthesis.speak(utterance);
+      const audio = new Audio(audioFile);
+      audio.volume = 1.0;
+      audio.play().catch(() => {
+        // autoplay blocked
+      });
     }, 700);
   }
 }
@@ -142,19 +137,11 @@ export const NOTIFICATION_SECONDS = [5 * 60, 3 * 60, 60, 30];
 export const COUNTDOWN_FROM = 10;
 
 /**
- * ユーザー操作時に呼び出して音声合成を初期化する。
- * ブラウザは初回のユーザージェスチャーで speechSynthesis を
- * アンロックする必要がある。
+ * ユーザー操作時に呼び出して音声を初期化する。
  */
 export function initSpeech(): void {
   if (typeof window === "undefined") return;
-  if (typeof speechSynthesis === "undefined") return;
 
-  // 空の発話でアンロック
-  const utterance = new SpeechSynthesisUtterance("");
-  utterance.volume = 0;
-  speechSynthesis.speak(utterance);
-
-  // AudioContext もアンロック
+  // AudioContext をアンロック
   getAudioContext();
 }
