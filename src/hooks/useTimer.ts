@@ -82,7 +82,7 @@ export function useTimer(id: string, durationMinutes: number) {
           for (const sec of NOTIFICATION_SECONDS) {
             if (newRemaining === sec && !played.has(`notify-${sec}`)) {
               played.add(`notify-${sec}`);
-              playNotification();
+              playNotification(sec);
               break;
             }
           }

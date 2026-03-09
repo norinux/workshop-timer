@@ -65,11 +65,22 @@ export function playFinishBell(): void {
 }
 
 /**
- * お知らせ音（5分前、3分前、1分前、30秒前）
- * 短い2音のチャイム
+ * 残り秒数に対応する日本語アナウンステキスト
  */
-export function playNotification(): void {
+const NOTIFICATION_MESSAGES: Record<number, string> = {
+  [5 * 60]: "残り5分です",
+  [3 * 60]: "残り3分です",
+  [60]: "残り1分です",
+  [30]: "残り30秒です",
+};
+
+/**
+ * 日本語音声アナウンス + チャイム音
+ */
+export function playNotification(remainingSeconds: number): void {
   if (typeof window === "undefined") return;
+
+  // チャイム音
   const audioContext = getAudioContext();
   const now = audioContext.currentTime;
 
@@ -88,6 +99,20 @@ export function playNotification(): void {
 
   playTone(now, 880, 0.25);
   playTone(now + 0.3, 1100, 0.35);
+
+  // 日本語音声アナウンス
+  const message = NOTIFICATION_MESSAGES[remainingSeconds];
+  if (message && typeof speechSynthesis !== "undefined") {
+    const utterance = new SpeechSynthesisUtterance(message);
+    utterance.lang = "ja-JP";
+    utterance.rate = 1.0;
+    utterance.volume = 1.0;
+
+    // チャイム後に少し間を置いてアナウンス
+    setTimeout(() => {
+      speechSynthesis.speak(utterance);
+    }, 700);
+  }
 }
 
 /**
