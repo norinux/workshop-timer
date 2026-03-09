@@ -55,7 +55,10 @@ export default function SlideEmbed({ onSetSlideUrl, embedUrl }: SlideEmbedProps)
 
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-md">
-      <p className="mb-2 text-sm font-medium text-slate-500">Google Slides URL</p>
+      <p className="mb-1 text-sm font-medium text-slate-500">Google Slides URL</p>
+      <p className="mb-2 text-xs text-slate-400">
+        * Google Slidesの共有設定で「リンクを知っている全員が閲覧可」にしてください
+      </p>
       <div className="flex gap-2">
         <input
           type="text"
