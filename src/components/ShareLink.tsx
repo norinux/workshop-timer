@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { QRCodeSVG } from "qrcode.react";
 
 interface ShareLinkProps {
   timerId: string;
@@ -25,9 +26,14 @@ export default function ShareLink({ timerId }: ShareLinkProps) {
   };
 
   return (
-    <div className="w-full max-w-md">
-      <p className="mb-2 text-sm text-slate-400">Share with participants</p>
-      <div className="flex gap-2">
+    <div className="flex flex-col items-center gap-4">
+      <p className="text-sm text-slate-400">Share with participants</p>
+      {viewUrl && (
+        <div className="rounded-xl bg-white p-4">
+          <QRCodeSVG value={viewUrl} size={180} />
+        </div>
+      )}
+      <div className="flex w-full max-w-md gap-2">
         <input
           type="text"
           readOnly
