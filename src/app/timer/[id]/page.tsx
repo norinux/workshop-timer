@@ -44,6 +44,7 @@ export default function TimerPage() {
                 onStart={start}
                 onPause={pause}
                 onReset={reset}
+                layout="vertical"
               />
               <CompactShareLink timerId={id} />
             </div>
