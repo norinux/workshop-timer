@@ -9,6 +9,8 @@ import TimerControls from "@/components/TimerControls";
 import TimerSetup from "@/components/TimerSetup";
 import ShareLink from "@/components/ShareLink";
 import SlideEmbed from "@/components/SlideEmbed";
+import CompactShareLink from "@/components/CompactShareLink";
+import CompactTimerSetup from "@/components/CompactTimerSetup";
 
 export default function TimerPage() {
   const params = useParams();
@@ -19,6 +21,7 @@ export default function TimerPage() {
     5
   );
   const [slideUrl, setSlideUrl] = useState<string | null>(null);
+  const [showPanel, setShowPanel] = useState(false);
 
   // Broadcast timer state to viewers
   useEffect(() => {
@@ -29,7 +32,7 @@ export default function TimerPage() {
   if (slideUrl) {
     return (
       <main className="flex h-screen flex-col bg-white">
-        <div className="flex items-center gap-6 border-b-2 border-slate-200 px-6 py-3">
+        <div className="flex items-center gap-4 border-b-2 border-slate-200 px-6 py-3">
           <div className="flex-1">
             <TimerDisplay timer={timer} size="normal" />
           </div>
@@ -39,7 +42,28 @@ export default function TimerPage() {
             onPause={pause}
             onReset={reset}
           />
+          <CompactShareLink timerId={id} />
+          <button
+            onClick={() => setShowPanel(!showPanel)}
+            className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors ${
+              showPanel
+                ? "border-blue-500 bg-blue-50 text-blue-600"
+                : "border-slate-200 text-slate-500 hover:bg-slate-50"
+            }`}
+          >
+            Settings
+          </button>
         </div>
+        {showPanel && (
+          <div className="flex items-center gap-4 border-b border-slate-100 bg-slate-50 px-6 py-3">
+            <CompactTimerSetup
+              onSetDuration={setDuration}
+              onSetLabel={setLabel}
+              currentLabel={timer.label}
+              currentDuration={timer.duration}
+            />
+          </div>
+        )}
         <div className="flex flex-1 flex-col p-4">
           <SlideEmbed embedUrl={slideUrl} onSetSlideUrl={setSlideUrl} />
         </div>
