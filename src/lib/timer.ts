@@ -1,6 +1,5 @@
 export interface TimerState {
   id: string;
-  label: string;
   duration: number; // total duration in seconds
   remaining: number; // remaining time in seconds
   status: "idle" | "running" | "paused" | "finished";
@@ -8,13 +7,11 @@ export interface TimerState {
 
 export function createTimer(
   id: string,
-  label: string,
   durationMinutes: number
 ): TimerState {
   const duration = durationMinutes * 60;
   return {
     id,
-    label,
     duration,
     remaining: duration,
     status: "idle",

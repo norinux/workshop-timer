@@ -4,8 +4,6 @@ import { useState } from "react";
 
 interface CompactTimerSetupProps {
   onSetDuration: (minutes: number) => void;
-  onSetLabel: (label: string) => void;
-  currentLabel: string;
   currentDuration: number;
 }
 
@@ -13,8 +11,6 @@ const PRESET_MINUTES = [1, 3, 5, 10, 15, 20, 30];
 
 export default function CompactTimerSetup({
   onSetDuration,
-  onSetLabel,
-  currentLabel,
   currentDuration,
 }: CompactTimerSetupProps) {
   const [customMinutes, setCustomMinutes] = useState("");
@@ -31,13 +27,6 @@ export default function CompactTimerSetup({
 
   return (
     <div className="flex flex-wrap items-center gap-3">
-      <input
-        type="text"
-        value={currentLabel}
-        onChange={(e) => onSetLabel(e.target.value)}
-        placeholder="Session name"
-        className="w-36 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm text-slate-800 placeholder-slate-400 focus:border-blue-500 focus:outline-none"
-      />
       <div className="flex gap-1">
         {PRESET_MINUTES.map((min) => (
           <button

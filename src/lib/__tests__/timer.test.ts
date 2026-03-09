@@ -10,10 +10,9 @@ import {
 
 describe("createTimer", () => {
   it("creates a timer with correct initial state", () => {
-    const timer = createTimer("abc", "Brainstorming", 5);
+    const timer = createTimer("abc", 5);
     expect(timer).toEqual({
       id: "abc",
-      label: "Brainstorming",
       duration: 300,
       remaining: 300,
       status: "idle",
@@ -21,7 +20,7 @@ describe("createTimer", () => {
   });
 
   it("handles 0 minutes", () => {
-    const timer = createTimer("x", "", 0);
+    const timer = createTimer("x", 0);
     expect(timer.duration).toBe(0);
     expect(timer.remaining).toBe(0);
   });
@@ -51,14 +50,13 @@ describe("formatTime", () => {
 
 describe("getProgress", () => {
   it("returns 0 when timer has not started", () => {
-    const timer = createTimer("a", "Test", 5);
+    const timer = createTimer("a", 5);
     expect(getProgress(timer)).toBe(0);
   });
 
   it("returns 50 when half the time has elapsed", () => {
     const timer: TimerState = {
       id: "a",
-      label: "Test",
       duration: 300,
       remaining: 150,
       status: "running",
@@ -69,7 +67,6 @@ describe("getProgress", () => {
   it("returns 100 when time is up", () => {
     const timer: TimerState = {
       id: "a",
-      label: "Test",
       duration: 300,
       remaining: 0,
       status: "finished",
@@ -78,7 +75,7 @@ describe("getProgress", () => {
   });
 
   it("returns 0 when duration is 0", () => {
-    const timer = createTimer("a", "", 0);
+    const timer = createTimer("a", 0);
     expect(getProgress(timer)).toBe(0);
   });
 });
@@ -87,7 +84,6 @@ describe("getUrgencyLevel", () => {
   it("returns normal when plenty of time remains", () => {
     const timer: TimerState = {
       id: "a",
-      label: "",
       duration: 300,
       remaining: 200,
       status: "running",
@@ -98,7 +94,6 @@ describe("getUrgencyLevel", () => {
   it("returns warning when 25% or less remains", () => {
     const timer: TimerState = {
       id: "a",
-      label: "",
       duration: 100,
       remaining: 25,
       status: "running",
@@ -109,7 +104,6 @@ describe("getUrgencyLevel", () => {
   it("returns critical when 10% or less remains", () => {
     const timer: TimerState = {
       id: "a",
-      label: "",
       duration: 100,
       remaining: 10,
       status: "running",
@@ -120,7 +114,6 @@ describe("getUrgencyLevel", () => {
   it("returns finished when status is finished", () => {
     const timer: TimerState = {
       id: "a",
-      label: "",
       duration: 100,
       remaining: 0,
       status: "finished",
@@ -131,7 +124,6 @@ describe("getUrgencyLevel", () => {
   it("returns finished when remaining is 0 even if not finished status", () => {
     const timer: TimerState = {
       id: "a",
-      label: "",
       duration: 100,
       remaining: 0,
       status: "running",

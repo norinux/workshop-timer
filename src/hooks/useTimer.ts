@@ -4,9 +4,9 @@ import { useState, useRef, useCallback, useEffect } from "react";
 import { TimerState, createTimer } from "@/lib/timer";
 import { playAlarm, playCountdownTick } from "@/lib/sound";
 
-export function useTimer(id: string, label: string, durationMinutes: number) {
+export function useTimer(id: string, durationMinutes: number) {
   const [timer, setTimer] = useState<TimerState>(() =>
-    createTimer(id, label, durationMinutes)
+    createTimer(id, durationMinutes)
   );
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const lastTickSoundRef = useRef<number>(-1);
@@ -60,10 +60,6 @@ export function useTimer(id: string, label: string, durationMinutes: number) {
     [clearTickInterval]
   );
 
-  const setLabel = useCallback((newLabel: string) => {
-    setTimer((prev) => ({ ...prev, label: newLabel }));
-  }, []);
-
   useEffect(() => {
     if (timer.status === "running") {
       intervalRef.current = setInterval(() => {
@@ -99,6 +95,5 @@ export function useTimer(id: string, label: string, durationMinutes: number) {
     pause,
     reset,
     setDuration,
-    setLabel,
   };
 }

@@ -8,8 +8,6 @@ describe("TimerSetup", () => {
     render(
       <TimerSetup
         onSetDuration={vi.fn()}
-        onSetLabel={vi.fn()}
-        currentLabel=""
         currentDuration={300}
       />
     );
@@ -25,8 +23,6 @@ describe("TimerSetup", () => {
     render(
       <TimerSetup
         onSetDuration={onSetDuration}
-        onSetLabel={vi.fn()}
-        currentLabel=""
         currentDuration={300}
       />
     );
@@ -38,29 +34,11 @@ describe("TimerSetup", () => {
     render(
       <TimerSetup
         onSetDuration={vi.fn()}
-        onSetLabel={vi.fn()}
-        currentLabel=""
         currentDuration={300}
       />
     );
     const button5m = screen.getByText("5m");
     expect(button5m.className).toContain("bg-blue-600");
-  });
-
-  it("updates label on input change", async () => {
-    const user = userEvent.setup();
-    const onSetLabel = vi.fn();
-    render(
-      <TimerSetup
-        onSetDuration={vi.fn()}
-        onSetLabel={onSetLabel}
-        currentLabel=""
-        currentDuration={300}
-      />
-    );
-    const input = screen.getByPlaceholderText("e.g. Brainstorming");
-    await user.type(input, "Ideation");
-    expect(onSetLabel).toHaveBeenCalled();
   });
 
   it("allows custom minutes input", async () => {
@@ -69,8 +47,6 @@ describe("TimerSetup", () => {
     render(
       <TimerSetup
         onSetDuration={onSetDuration}
-        onSetLabel={vi.fn()}
-        currentLabel=""
         currentDuration={300}
       />
     );

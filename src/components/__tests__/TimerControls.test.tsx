@@ -7,7 +7,7 @@ import { TimerState } from "@/lib/timer";
 function makeTimer(overrides: Partial<TimerState> = {}): TimerState {
   return {
     id: "test",
-    label: "",
+
     duration: 300,
     remaining: 300,
     status: "idle",

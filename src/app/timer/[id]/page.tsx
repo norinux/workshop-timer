@@ -15,11 +15,7 @@ import CompactTimerSetup from "@/components/CompactTimerSetup";
 export default function TimerPage() {
   const params = useParams();
   const id = params.id as string;
-  const { timer, start, pause, reset, setDuration, setLabel } = useTimer(
-    id,
-    "",
-    5
-  );
+  const { timer, start, pause, reset, setDuration } = useTimer(id, 5);
   const [slideUrl, setSlideUrl] = useState<string | null>(null);
   const [showPanel, setShowPanel] = useState(false);
   const [showTimer, setShowTimer] = useState(true);
@@ -52,8 +48,6 @@ export default function TimerPage() {
               {showPanel ? (
                 <CompactTimerSetup
                   onSetDuration={setDuration}
-                  onSetLabel={setLabel}
-                  currentLabel={timer.label}
                   currentDuration={timer.duration}
                 />
               ) : null}
@@ -110,8 +104,6 @@ export default function TimerPage() {
       {timer.status === "idle" && (
         <TimerSetup
           onSetDuration={setDuration}
-          onSetLabel={setLabel}
-          currentLabel={timer.label}
           currentDuration={timer.duration}
         />
       )}

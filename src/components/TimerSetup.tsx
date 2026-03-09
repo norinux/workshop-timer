@@ -4,8 +4,6 @@ import { useState } from "react";
 
 interface TimerSetupProps {
   onSetDuration: (minutes: number) => void;
-  onSetLabel: (label: string) => void;
-  currentLabel: string;
   currentDuration: number; // in seconds
 }
 
@@ -13,8 +11,6 @@ const PRESET_MINUTES = [1, 3, 5, 10, 15, 20, 30];
 
 export default function TimerSetup({
   onSetDuration,
-  onSetLabel,
-  currentLabel,
   currentDuration,
 }: TimerSetupProps) {
   const [customMinutes, setCustomMinutes] = useState("");
@@ -31,20 +27,6 @@ export default function TimerSetup({
 
   return (
     <div className="w-full max-w-md space-y-6">
-      <div>
-        <label htmlFor="timer-label" className="mb-2 block text-sm font-medium text-slate-500">
-          Session Name
-        </label>
-        <input
-          id="timer-label"
-          type="text"
-          value={currentLabel}
-          onChange={(e) => onSetLabel(e.target.value)}
-          placeholder="e.g. Brainstorming"
-          className="w-full rounded-lg border-2 border-slate-200 bg-white px-4 py-3 text-slate-800 placeholder-slate-400 focus:border-blue-500 focus:outline-none"
-        />
-      </div>
-
       <div>
         <p className="mb-2 text-sm font-medium text-slate-500">Quick Set (minutes)</p>
         <div className="flex flex-wrap gap-2">

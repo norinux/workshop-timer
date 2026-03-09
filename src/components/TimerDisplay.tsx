@@ -31,16 +31,8 @@ export default function TimerDisplay({ timer, size = "normal" }: TimerDisplayPro
     <div
       className={`flex flex-col items-center justify-center rounded-2xl border-2 p-8 transition-all duration-500 ${urgencyBorderStyles[urgency]}`}
       role="timer"
-      aria-label={`${timer.label}: ${timeText} remaining`}
+      aria-label={`${timeText} remaining`}
     >
-      {timer.label && (
-        <h2
-          className={`mb-4 font-semibold text-slate-500 ${isLarge ? "text-3xl" : "text-xl"}`}
-        >
-          {timer.label}
-        </h2>
-      )}
-
       <div
         className={`font-mono font-bold tabular-nums ${urgencyStyles[urgency]} ${isLarge ? "text-[12rem] leading-none" : "text-8xl"}`}
       >

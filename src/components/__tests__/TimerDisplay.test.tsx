@@ -6,7 +6,6 @@ import { TimerState } from "@/lib/timer";
 function makeTimer(overrides: Partial<TimerState> = {}): TimerState {
   return {
     id: "test",
-    label: "Test Session",
     duration: 300,
     remaining: 300,
     status: "idle",
@@ -18,11 +17,6 @@ describe("TimerDisplay", () => {
   it("renders the time formatted correctly", () => {
     render(<TimerDisplay timer={makeTimer({ remaining: 125 })} />);
     expect(screen.getByText("02:05")).toBeInTheDocument();
-  });
-
-  it("renders the label", () => {
-    render(<TimerDisplay timer={makeTimer({ label: "Brainstorming" })} />);
-    expect(screen.getByText("Brainstorming")).toBeInTheDocument();
   });
 
   it("shows TIME'S UP when finished", () => {
