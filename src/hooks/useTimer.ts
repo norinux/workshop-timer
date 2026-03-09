@@ -6,6 +6,7 @@ import {
   playFinishBell,
   playNotification,
   playCountdownTick,
+  initSpeech,
   NOTIFICATION_SECONDS,
   COUNTDOWN_FROM,
 } from "@/lib/sound";
@@ -25,6 +26,7 @@ export function useTimer(id: string, durationMinutes: number) {
   }, []);
 
   const start = useCallback(() => {
+    initSpeech();
     setTimer((prev) => {
       if (prev.status === "finished") return prev;
       if (prev.remaining <= 0) return prev;

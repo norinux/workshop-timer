@@ -140,3 +140,21 @@ export const NOTIFICATION_SECONDS = [5 * 60, 3 * 60, 60, 30];
 
 /** カウントダウン開始秒数 */
 export const COUNTDOWN_FROM = 10;
+
+/**
+ * ユーザー操作時に呼び出して音声合成を初期化する。
+ * ブラウザは初回のユーザージェスチャーで speechSynthesis を
+ * アンロックする必要がある。
+ */
+export function initSpeech(): void {
+  if (typeof window === "undefined") return;
+  if (typeof speechSynthesis === "undefined") return;
+
+  // 空の発話でアンロック
+  const utterance = new SpeechSynthesisUtterance("");
+  utterance.volume = 0;
+  speechSynthesis.speak(utterance);
+
+  // AudioContext もアンロック
+  getAudioContext();
+}
