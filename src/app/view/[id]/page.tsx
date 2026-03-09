@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { TimerState } from "@/lib/timer";
-import { subscribeToTimer, getStoredTimerState } from "@/lib/sync";
+import { subscribeToTimer } from "@/lib/sync";
 import TimerDisplay from "@/components/TimerDisplay";
 
 export default function ViewPage() {
@@ -12,13 +12,6 @@ export default function ViewPage() {
   const [timer, setTimer] = useState<TimerState | null>(null);
 
   useEffect(() => {
-    // Load initial state
-    const stored = getStoredTimerState(id);
-    if (stored) {
-      setTimer(stored.timer);
-    }
-
-    // Subscribe to updates
     const unsubscribe = subscribeToTimer(id, (data) => {
       setTimer(data.timer);
     });

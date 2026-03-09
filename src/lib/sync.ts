@@ -1,12 +1,13 @@
 import { TimerState } from "./timer";
-
-const CHANNEL_NAME = "workshop-timer-sync";
-const STORAGE_PREFIX = "workshop-timer:";
+import { supabase } from "./supabase";
+import type { RealtimeChannel } from "@supabase/supabase-js";
 
 export interface TimerSyncData {
   timer: TimerState;
   updatedAt: number;
 }
+
+let currentChannel: RealtimeChannel | null = null;
 
 export function broadcastTimerState(timer: TimerState): void {
   if (typeof window === "undefined") return;
@@ -16,30 +17,20 @@ export function broadcastTimerState(timer: TimerState): void {
     updatedAt: Date.now(),
   };
 
-  // Save to localStorage for new viewers
-  localStorage.setItem(`${STORAGE_PREFIX}${timer.id}`, JSON.stringify(data));
+  // Broadcast via Supabase Realtime
+  const channelName = `timer-${timer.id}`;
 
-  // Broadcast to open tabs
-  try {
-    const channel = new BroadcastChannel(CHANNEL_NAME);
-    channel.postMessage(data);
-    channel.close();
-  } catch {
-    // BroadcastChannel not supported
+  if (!currentChannel || currentChannel.topic !== `realtime:${channelName}`) {
+    currentChannel?.unsubscribe();
+    currentChannel = supabase.channel(channelName);
+    currentChannel.subscribe();
   }
-}
 
-export function getStoredTimerState(id: string): TimerSyncData | null {
-  if (typeof window === "undefined") return null;
-
-  const stored = localStorage.getItem(`${STORAGE_PREFIX}${id}`);
-  if (!stored) return null;
-
-  try {
-    return JSON.parse(stored) as TimerSyncData;
-  } catch {
-    return null;
-  }
+  currentChannel.send({
+    type: "broadcast",
+    event: "timer-update",
+    payload: data,
+  });
 }
 
 export function subscribeToTimer(
@@ -48,29 +39,17 @@ export function subscribeToTimer(
 ): () => void {
   if (typeof window === "undefined") return () => {};
 
-  // Poll localStorage for cross-tab sync
-  const pollInterval = setInterval(() => {
-    const data = getStoredTimerState(id);
-    if (data) {
-      callback(data);
-    }
-  }, 500);
+  const channelName = `timer-${id}`;
+  const channel = supabase.channel(channelName);
 
-  // Also listen to BroadcastChannel for instant updates
-  let channel: BroadcastChannel | null = null;
-  try {
-    channel = new BroadcastChannel(CHANNEL_NAME);
-    channel.onmessage = (event: MessageEvent<TimerSyncData>) => {
-      if (event.data.timer.id === id) {
-        callback(event.data);
-      }
-    };
-  } catch {
-    // BroadcastChannel not supported
-  }
+  channel
+    .on("broadcast", { event: "timer-update" }, (payload) => {
+      const data = payload.payload as TimerSyncData;
+      callback(data);
+    })
+    .subscribe();
 
   return () => {
-    clearInterval(pollInterval);
-    channel?.close();
+    channel.unsubscribe();
   };
 }
