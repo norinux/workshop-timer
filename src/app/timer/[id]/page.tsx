@@ -22,6 +22,7 @@ export default function TimerPage() {
   );
   const [slideUrl, setSlideUrl] = useState<string | null>(null);
   const [showPanel, setShowPanel] = useState(false);
+  const [showTimer, setShowTimer] = useState(true);
 
   // Broadcast timer state to viewers
   useEffect(() => {
@@ -32,29 +33,49 @@ export default function TimerPage() {
   if (slideUrl) {
     return (
       <main className="flex h-screen flex-col bg-white">
-        <div className="flex items-center gap-4 border-b-2 border-slate-200 px-6 py-3">
-          <div className="flex-1">
-            <TimerDisplay timer={timer} size="normal" />
+        {showTimer ? (
+          <div className="flex items-center gap-4 border-b-2 border-slate-200 px-6 py-3">
+            <div className="flex-1">
+              <TimerDisplay timer={timer} size="normal" />
+            </div>
+            <TimerControls
+              timer={timer}
+              onStart={start}
+              onPause={pause}
+              onReset={reset}
+            />
+            <CompactShareLink timerId={id} />
+            <button
+              onClick={() => setShowPanel(!showPanel)}
+              className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors ${
+                showPanel
+                  ? "border-blue-500 bg-blue-50 text-blue-600"
+                  : "border-slate-200 text-slate-500 hover:bg-slate-50"
+              }`}
+            >
+              Settings
+            </button>
+            <button
+              onClick={() => {
+                setShowTimer(false);
+                setShowPanel(false);
+              }}
+              className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-500 transition-colors hover:bg-slate-50"
+            >
+              Hide Timer
+            </button>
           </div>
-          <TimerControls
-            timer={timer}
-            onStart={start}
-            onPause={pause}
-            onReset={reset}
-          />
-          <CompactShareLink timerId={id} />
-          <button
-            onClick={() => setShowPanel(!showPanel)}
-            className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors ${
-              showPanel
-                ? "border-blue-500 bg-blue-50 text-blue-600"
-                : "border-slate-200 text-slate-500 hover:bg-slate-50"
-            }`}
-          >
-            Settings
-          </button>
-        </div>
-        {showPanel && (
+        ) : (
+          <div className="flex items-center justify-end border-b border-slate-100 px-6 py-2">
+            <button
+              onClick={() => setShowTimer(true)}
+              className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-500 transition-colors hover:bg-slate-50"
+            >
+              Show Timer
+            </button>
+          </div>
+        )}
+        {showTimer && showPanel && (
           <div className="flex items-center gap-4 border-b border-slate-100 bg-slate-50 px-6 py-3">
             <CompactTimerSetup
               onSetDuration={setDuration}
