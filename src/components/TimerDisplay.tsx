@@ -27,6 +27,26 @@ export default function TimerDisplay({ timer, size = "normal" }: TimerDisplayPro
   const timeText = formatTime(timer.remaining);
   const isLarge = size === "large";
 
+  // Green → Yellow → Red based on progress (100→0)
+  const getBarColor = (pct: number): string => {
+    if (pct <= 0) return "rgb(239, 68, 68)"; // red-500
+    if (pct >= 100) return "rgb(34, 197, 94)"; // green-500
+    if (pct > 50) {
+      // green → yellow (100→50)
+      const t = (pct - 50) / 50;
+      const r = Math.round(234 + (34 - 234) * t);
+      const g = Math.round(179 + (197 - 179) * t);
+      const b = Math.round(8 + (94 - 8) * t);
+      return `rgb(${r}, ${g}, ${b})`;
+    }
+    // yellow → red (50→0)
+    const t = pct / 50;
+    const r = Math.round(239 + (234 - 239) * t);
+    const g = Math.round(68 + (179 - 68) * t);
+    const b = Math.round(68 + (8 - 68) * t);
+    return `rgb(${r}, ${g}, ${b})`;
+  };
+
   return (
     <div
       className={`flex w-full flex-col items-center justify-center rounded-2xl border-2 p-4 transition-all duration-500 sm:p-8 ${urgencyBorderStyles[urgency]}`}
@@ -45,16 +65,13 @@ export default function TimerDisplay({ timer, size = "normal" }: TimerDisplayPro
         </div>
       )}
 
-      <div className="mt-4 h-3 w-full max-w-md overflow-hidden rounded-full bg-slate-200 sm:mt-6">
+      <div className="mt-4 h-3 w-full overflow-hidden rounded-full bg-slate-200 sm:mt-6">
         <div
-          className={`h-full rounded-full transition-all duration-1000 ${
-            urgency === "critical" || urgency === "finished"
-              ? "bg-red-500"
-              : urgency === "warning"
-                ? "bg-amber-500"
-                : "bg-blue-500"
-          }`}
-          style={{ width: `${progress}%` }}
+          className="ml-auto h-full rounded-full transition-all duration-1000"
+          style={{
+            width: `${progress}%`,
+            backgroundColor: getBarColor(progress),
+          }}
           role="progressbar"
           aria-valuenow={progress}
           aria-valuemin={0}
