@@ -57,9 +57,9 @@ describe("formatTime", () => {
 });
 
 describe("getProgress", () => {
-  it("returns 0 when timer has not started", () => {
+  it("returns 100 when timer has not started (full bar)", () => {
     const timer = createTimer("a", 5);
-    expect(getProgress(timer)).toBe(0);
+    expect(getProgress(timer)).toBe(100);
   });
 
   it("returns 50 when half the time has elapsed", () => {
@@ -72,18 +72,28 @@ describe("getProgress", () => {
     expect(getProgress(timer)).toBe(50);
   });
 
-  it("returns 100 when time is up", () => {
+  it("returns 0 when time is up (empty bar)", () => {
     const timer: TimerState = {
       id: "a",
       duration: 300,
       remaining: 0,
       status: "finished",
     };
-    expect(getProgress(timer)).toBe(100);
+    expect(getProgress(timer)).toBe(0);
   });
 
   it("returns 0 when duration is 0", () => {
     const timer = createTimer("a", 0);
+    expect(getProgress(timer)).toBe(0);
+  });
+
+  it("returns 0 when overtime (negative remaining)", () => {
+    const timer: TimerState = {
+      id: "a",
+      duration: 300,
+      remaining: -30,
+      status: "overtime",
+    };
     expect(getProgress(timer)).toBe(0);
   });
 });

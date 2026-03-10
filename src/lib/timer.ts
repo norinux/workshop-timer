@@ -28,7 +28,8 @@ export function formatTime(totalSeconds: number): string {
 
 export function getProgress(timer: TimerState): number {
   if (timer.duration === 0) return 0;
-  return ((timer.duration - timer.remaining) / timer.duration) * 100;
+  if (timer.remaining <= 0) return 0;
+  return (timer.remaining / timer.duration) * 100;
 }
 
 export function getUrgencyLevel(
