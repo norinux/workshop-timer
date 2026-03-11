@@ -11,6 +11,7 @@ import ShareLink from "@/components/ShareLink";
 import SlideEmbed from "@/components/SlideEmbed";
 import CompactShareLink from "@/components/CompactShareLink";
 import CompactTimerSetup from "@/components/CompactTimerSetup";
+import SoundToggle from "@/components/SoundToggle";
 
 export default function TimerPage() {
   const params = useParams();
@@ -42,6 +43,7 @@ export default function TimerPage() {
                 onReset={reset}
                 layout="vertical"
               />
+              <SoundToggle />
               <CompactShareLink timerId={id} />
             </div>
             <div className="flex items-center gap-2 border-t border-slate-100 bg-slate-50 px-6 py-2">
@@ -95,12 +97,15 @@ export default function TimerPage() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-8 bg-white p-8">
       <TimerDisplay timer={timer} size="large" />
-      <TimerControls
-        timer={timer}
-        onStart={start}
-        onPause={pause}
-        onReset={reset}
-      />
+      <div className="flex items-center gap-4">
+        <TimerControls
+          timer={timer}
+          onStart={start}
+          onPause={pause}
+          onReset={reset}
+        />
+        <SoundToggle />
+      </div>
       {timer.status === "idle" && (
         <TimerSetup
           onSetDuration={setDuration}

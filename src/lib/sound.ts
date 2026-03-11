@@ -1,3 +1,13 @@
+let muted = false;
+
+export function isMuted(): boolean {
+  return muted;
+}
+
+export function setMuted(value: boolean): void {
+  muted = value;
+}
+
 let sharedAudioContext: AudioContext | null = null;
 
 function getAudioContext(): AudioContext {
@@ -53,6 +63,7 @@ function playBellHit(audioContext: AudioContext, startTime: number): void {
  */
 export function playFinishBell(): void {
   if (typeof window === "undefined") return;
+  if (muted) return;
   const audioContext = getAudioContext();
   const now = audioContext.currentTime;
 
@@ -76,6 +87,7 @@ const NOTIFICATION_AUDIO: Record<number, string> = {
  */
 export function playNotification(remainingSeconds: number): void {
   if (typeof window === "undefined") return;
+  if (muted) return;
 
   // チャイム音
   const audioContext = getAudioContext();
@@ -115,6 +127,7 @@ export function playNotification(remainingSeconds: number): void {
  */
 export function playCountdownTick(): void {
   if (typeof window === "undefined") return;
+  if (muted) return;
   const audioContext = getAudioContext();
   const now = audioContext.currentTime;
 
