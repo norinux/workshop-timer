@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { useTimer } from "@/hooks/useTimer";
+import { useWakeLock } from "@/hooks/useWakeLock";
 import { broadcastTimerState } from "@/lib/sync";
 import TimerDisplay from "@/components/TimerDisplay";
 import TimerControls from "@/components/TimerControls";
@@ -20,6 +21,8 @@ export default function TimerPage() {
   const [slideUrl, setSlideUrl] = useState<string | null>(null);
   const [showPanel, setShowPanel] = useState(false);
   const [showTimer, setShowTimer] = useState(true);
+
+  useWakeLock(timer.status === "running" || timer.status === "overtime");
 
   // Broadcast timer state to viewers
   useEffect(() => {
